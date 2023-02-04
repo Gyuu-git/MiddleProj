@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="mainboard"> 
+
+ <select id="mainBoardListN" resultClass="mainJoinVO">
+ 	 SELECT A.MB_NO, 
+       A.MB_TITLE, 
+       A.MB_CONTENT, 
+       A.MB_DATE, 
+       TO_CHAR(A.MB_SDATE, 'YYYY/MM/DD') AS MB_SDATE, 
+       TO_CHAR(A.MB_SDATE, 'YYYY/MM/DD') AS MB_EDATE, 
+       A.MB_PIC,
+       CASE WHEN A.MB_STATUS=0 THEN '모집중'
+            WHEN A.MB_STATUS=1 THEN '모집완료'
+            END AS MB_STATUS,
+       A.MB_HIT,
+       A.P_NAME,
+       B.P_PIC,
+       C.REG_NAME
+       FROM MAIN_BOARD A, PROFILE B, REGION C 
+       WHERE A.P_NAME = B.P_NAME
+       AND 
+       A.REG_NO = C.REG_NO
+       ORDER BY MB_NO DESC
+ </select>
+ 
+ <select id="getOneMainBoard" parameterClass="int" resultClass="mainJoinVO">
+ 	SELECT A.MB_NO, 
+       A.MB_TITLE, 
+       A.MB_CONTENT, 
+       A.MB_DATE, 
+       TO_CHAR(A.MB_SDATE, 'YYYY/MM/DD') AS MB_SDATE, 
+       TO_CHAR(A.MB_SDATE, 'YYYY/MM/DD') AS MB_EDATE, 
+       A.MB_PIC,
+       CASE WHEN A.MB_STATUS=0 THEN '모집중'
+            WHEN A.MB_STATUS=1 THEN '모집완료'
+            END AS MB_STATUS,
+       A.MB_HIT,
+       A.P_NAME,
+       B.P_PIC,
+       C.REG_NAME
+       FROM MAIN_BOARD A, PROFILE B, REGION C 
+       WHERE A.P_NAME = B.P_NAME
+       AND 
+       A.REG_NO = C.REG_NO
+       AND 
+       MB_NO = #mb_no#
+ </select>
+ 
+ <update id="getMbUphit" parameterClass="int">
+ 	UPDATE MAIN_BOARD 
+      SET MB_HIT = MB_HIT+1
+     WHERE MB_NO = #mb_no#
+ </update>
+ 
+ <!-- 세션만 -->
+ <insert id="insertMainReply" parameterClass="HashMap">
+  INSERT into MAIN_COMMENT (MCOM_NO, MCOM_CONTENT, MCOM_DATE, MB_NO, P_NAME) 
+     VALUES (MAIN_COMMENT_SEQ.NEXTVAL,#content#, SYSDATE, $mb_no$, '박지은')
+ </insert>
+ 
+ <select id="getMBreplyList" parameterClass="int" resultClass="mainReplyVO">
+ select B.P_PIC,
+       A.P_NAME, 
+       A.MCOM_DATE,
+       A.MCOM_CONTENT
+    FROM MAIN_COMMENT A, PROFILE B
+    WHERE A.P_NAME = B.P_NAME
+    AND MB_NO = #mb_no# 
+ </select>
+ 
+ <!-- 이건 안쓸 듯... -->
+<!--  <select id="getCountryName" parameterClass="String" resultClass="countryVO"> -->
+<!--     SELECT COUN_NAME -->
+<!--      from CONTINENT A, COUNTRY B -->
+<!--        WHERE A.CONTI_NO = B.CONTI_NO -->
+<!--        AND  A.CONTI_NO = #conti# -->
+<!--  </select> -->
+ 
+ <select id="getallcontinent" resultClass="mainRegionVO">
+  SELECT * 
+   FROM CONTINENT
+ </select>
+ 
+ 
+ <select id="getallcountry" parameterClass="int" resultClass="mainRegionVO"> 
+ select B.COUN_NO,
+       B.COUN_NAME
+    from CONTINENT A, COUNTRY B
+    where A.CONTI_NO = B.CONTI_NO
+    AND A.CONTI_NO = #conti_no#
+ </select>
+
+
+</sqlMap>

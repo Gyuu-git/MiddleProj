@@ -1,0 +1,19 @@
+package withme.dao;
+
+import java.util.List;
+
+import vo.ChatVO;
+
+public interface IWithMeChatDao {
+	// 채팅방 가져오기
+	public List<Integer> getWmCode(String pName);
+	
+	// 채팅 내역 가져오기
+	public List<ChatVO> getChatList(ChatVO chatVo);
+	
+//	// 채팅 텍스트 내역 저장
+//	public int insertChat(Map<String, String> param);
+	
+	// 채팅 텍스트 내역 저장
+	public int insertChat(ChatVO chatVo);
+}

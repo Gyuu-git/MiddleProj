@@ -1,0 +1,72 @@
+package member.service;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import member.dao.IMemberDao;
+import member.dao.MemberDaoImpl;
+import vo.NoteVO;
+
+public class MemberServiceImpl implements IMemberService {
+	private static IMemberService service;
+	private IMemberDao dao;
+	
+	
+	
+	private MemberServiceImpl() {
+		dao=MemberDaoImpl.getDao();
+	}
+	
+	public static IMemberService getService() {
+		if(service==null) {
+			service=new MemberServiceImpl();
+		}
+		return service;
+	}
+	
+	@Override
+	public String getId(String id) throws SQLException{
+		
+		String name=dao.getId(id);
+		
+		return name;
+	}
+
+	@Override
+	public Object insertNote(NoteVO vo) throws SQLException {
+		Object obj=dao.insertNote(vo);
+		
+		return obj;
+	}
+
+
+	@Override
+	public List<NoteVO> getNoteList(String mem_id) throws SQLException {
+		List<NoteVO> list=dao.getNoteList(mem_id);
+		System.out.println("서비스 넘겨받은 아이디 : "+mem_id);
+		return list;
+	}
+
+	@Override//로그인을 하기 위해 로그인 아이디와 로그인 비밀번호 받는 함수
+	public int Join(Map<String, Object> map) throws SQLException {
+		System.out.println(map.get("id"));
+		System.out.println(map.get("pw"));
+		int answer=dao.Join(map);
+		
+		return answer;
+	}
+
+	@Override//로그인 후 상단 풋터에 이름을 띄우기 위한 이름 가져오는 함수
+	public String getName(String id) throws SQLException {
+		String name=dao.getName(id);
+		return name;
+	}
+
+	@Override
+	public String searchId(Map<String, Object> map) throws SQLException {
+		String answer=dao.searchId(map);
+		return answer;
+	}
+	
+}

@@ -1,0 +1,5 @@
+package freeBoard.controller;
+
+public @interface RequestMapping {
+
+}

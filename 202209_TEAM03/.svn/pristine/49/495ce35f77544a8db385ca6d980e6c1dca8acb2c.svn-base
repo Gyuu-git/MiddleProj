@@ -1,0 +1,40 @@
+package vo;
+
+public class VoteVO {
+	private int vote_no;
+	private String vote_title;
+	private String vote_sdate;
+	private String vote_edate;
+	private int withme_code;
+	
+	int getVote_no() {
+		return vote_no;
+	}
+	void setVote_no(int vote_no) {
+		this.vote_no = vote_no;
+	}
+	String getVote_title() {
+		return vote_title;
+	}
+	void setVote_title(String vote_title) {
+		this.vote_title = vote_title;
+	}
+	String getVote_sdate() {
+		return vote_sdate;
+	}
+	void setVote_sdate(String vote_sdate) {
+		this.vote_sdate = vote_sdate;
+	}
+	String getVote_edate() {
+		return vote_edate;
+	}
+	void setVote_edate(String vote_edate) {
+		this.vote_edate = vote_edate;
+	}
+	int getWithme_code() {
+		return withme_code;
+	}
+	void setWithme_code(int withme_code) {
+		this.withme_code = withme_code;
+	}
+}

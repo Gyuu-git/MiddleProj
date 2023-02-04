@@ -1,0 +1,104 @@
+package freeBoard.controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+
+import freeBoard.service.FreeBoardServiceImpl;
+import freeBoard.service.IFreeBoardService;
+import vo.FreeBoardVO;
+
+@MultipartConfig(
+	    fileSizeThreshold = 1024 * 1024 * 10,
+	    maxFileSize = 1024 * 1024 * 30,
+	    maxRequestSize = 1024 * 1024 * 100
+)
+@WebServlet("/freeboard/insertBoard.do")
+public class InsertBoard extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.getRequestDispatcher("/WEB-INF/view/free/freeBoardWrite.jsp").forward(request, response);
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("utf-8");
+		
+		String uploadPath = "D:/freeBoardPic";
+		
+		File uploadDir = new File(uploadPath);
+		if(!uploadDir.exists()) {
+			uploadDir.mkdirs();
+		}
+		
+		String title = request.getParameter("f_title");
+		System.out.println("제목" + title);
+		String content = request.getParameter("f_content");
+		System.out.println("내용 : " + content);
+		content = content.replace("\r\n", "<br>");
+	    String region = request.getParameter("cityNameee");
+	    System.out.println("지역 : "  + region);
+	    String pname = request.getParameter("pname");
+	    System.out.println("프로필닉네임 : " + pname);
+		
+		FreeBoardVO fvo = new FreeBoardVO();
+		fvo.setFb_title(title);
+		fvo.setFb_content(content);
+		fvo.setFb_reg(region);
+		fvo.setP_name(pname);
+		
+		Part part = request.getPart("free_pic");
+
+		if(part!=null) {
+			String fileName = extractFileName(part);
+			
+			if(!"".equals(fileName)) {
+				try {
+					part.write(uploadPath + File.separator + fileName);
+					fvo.setFb_pic(fileName);
+				} catch (Exception e) {
+					fvo.setFb_pic(null);
+				}
+			}
+		}
+		
+		
+		// 서비스 객체 생성
+		IFreeBoardService service = FreeBoardServiceImpl.getInstance();
+		
+		// insert
+		
+		Object obj = service.insertBoard(fvo);
+		
+		response.sendRedirect(request.getContextPath() + "/freeboard/freeBoardList.do");
+		
+	}
+
+
+	private String extractFileName(Part part) {
+		String fileName = "";
+	      
+	      String contentDisposition = part.getHeader("content-disposition");
+	      String[] items = contentDisposition.split(";");
+	      for(String item : items) {
+	         if(item.trim().startsWith("filename")) { 
+	            // filename = "test1.txt"
+	            fileName = item.substring(item.indexOf("=")+2, item.length()-1);
+	         }
+	         
+	      }
+	      return fileName;
+	}
+
+}

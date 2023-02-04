@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="review">
+	<select id="getAllReview"  resultClass="reviewBoardVO">
+		select * from review
+	</select>
+	
+	<!--  <select id="getReview" parameterClass="map" resultClass="reviewBoardVO">
+		select * 
+		  from REVIEW 
+		 where REG_NO=#REG_NO# 
+		 		and 	REV_DATE between #startDate# and #endDate#
+	</select> -->
+
+<!-- 	<select id="getCountry" resultClass="String" parameterClass="int"> -->
+<!-- 		select coun_name -->
+<!--   		  from country -->
+<!--         where  coun_no=((select coun_no -->
+<!--                     				from region -->
+<!--                    				   where reg_no=(select reg_no -->
+<!--                                    						   from review -->
+<!--                                    						  where reg_no=#regNo#))); -->
+	
+<!-- 	</select> -->
+	
+		<select id="getDetailList" parameterClass="int" resultClass="reviewBoardVO">
+			select * from review where rev_no=#rev_no#
+		</select>
+
+</sqlMap>

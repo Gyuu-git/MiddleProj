@@ -1,0 +1,70 @@
+package freeBoard.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
+import freeBoard.service.FreeBoardServiceImpl;
+import freeBoard.service.IFreeBoardService;
+import vo.FreeBoardVO;
+
+
+@WebServlet("/freeboard/insertBoard.do")
+public class InsertBoard extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("utf-8");
+		
+		String title = request.getParameter("vt");
+		String content = request.getParameter("vc");
+		String pname = request.getParameter("pname");
+		
+		FreeBoardVO vo = new FreeBoardVO();
+		vo.setFb_title(title);
+		vo.setFb_content(content);
+		vo.setP_name(pname);
+		
+		// 서비스 객체 생성
+		IFreeBoardService service = FreeBoardServiceImpl.getInstance();
+		
+		// insert
+		
+		int res = service.insertBoard(vo);
+		if(res != 0) {
+			System.out.println("등록 성공!");
+			response.setStatus(200);
+			PrintWriter out = response.getWriter();
+			out.write(res);
+			
+			// json 타입 데이터
+//			Gson gson = new Gson();
+//			String jsondata = null;  // json으로 변환된 데이터가 저장될 변수 선언
+//			
+//			jsondata = gson.toJson(res);
+//			response.flushBuffer();
+			
+		}else {
+			System.out.println("등록요청 실행실패");
+			response.sendError(400);
+//		
+		}
+		
+		
+	}
+
+}

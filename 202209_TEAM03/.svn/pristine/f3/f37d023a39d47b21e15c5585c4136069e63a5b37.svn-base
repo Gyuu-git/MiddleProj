@@ -1,0 +1,114 @@
+package reviewBoard.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.ibatis.config.SqlMapClientFactory;
+import vo.ReviewBoardVO;
+
+public class ReviewDaoImpl implements IReviewDao {
+	
+	private SqlMapClient client;
+	private static IReviewDao dao;
+	
+	 private ReviewDaoImpl() {
+		 client = SqlMapClientFactory.getSqlMapClient();
+	 }
+	 
+	 public static IReviewDao getDao() {
+		 if(dao == null) dao = new ReviewDaoImpl();
+		 
+		 return dao;
+	 }
+
+	@Override
+	public List<ReviewBoardVO> getReview(Map<String, Object> map) {
+		List<ReviewBoardVO> reviewList2 = null;
+		
+		try {
+			reviewList2 = client.queryForList("review.getReview",map);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return reviewList2;
+	}
+	
+	@Override
+	public List<ReviewBoardVO> getAllReview() {
+		
+		List<ReviewBoardVO> reviewList = null;
+		
+		try {
+			reviewList = client.queryForList("review.getAllReview");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return reviewList;
+	}
+
+	@Override
+	public int insertReview(ReviewBoardVO vo) {
+		int cnt = 0;
+		
+		try {
+			Object obj = client.insert("review.insertReview", vo);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return cnt;
+	}
+
+	@Override
+	public int deleteReview(int rev_no) {
+		int cnt = 0;
+		
+		try {
+			cnt = client.delete("review.deleteReview", rev_no);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return cnt;
+	}
+
+	@Override
+	public int updateReview(ReviewBoardVO vo) {
+		int cnt = 0;
+		
+		try {
+			cnt = client.update("review.updateReview", vo);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return cnt;
+	}
+
+	@Override
+	public ReviewBoardVO getDetail(int rev_no) {
+		ReviewBoardVO dvo = null;
+		
+		try {
+			dvo = (ReviewBoardVO) client.queryForObject("review.getDetailList",rev_no);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return dvo;
+	}
+
+
+}

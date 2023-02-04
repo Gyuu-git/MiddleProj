@@ -1,0 +1,128 @@
+package freeBoard.controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+
+import freeBoard.service.FreeBoardServiceImpl;
+import freeBoard.service.IFreeBoardService;
+import vo.FreeBoardVO;
+
+
+@MultipartConfig(
+	    fileSizeThreshold = 1024 * 1024 * 10,
+	    maxFileSize = 1024 * 1024 * 30,
+	    maxRequestSize = 1024 * 1024 * 100
+)
+@WebServlet("/freeboard/updateBoard.do")
+public class UpdateBoard extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/* 자유게시판 게시글 수정페이지로 이동 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		
+		int bonum = Integer.parseInt(request.getParameter("bo_num"));
+		
+		// 서비스객체
+		IFreeBoardService service = FreeBoardServiceImpl.getInstance();
+		
+		// 원래게시글 불러오기
+		FreeBoardVO board = service.getArticle(bonum);
+		
+		// 게시글번호를 키값에 담기
+		request.setAttribute("board", board);
+		
+		request.getRequestDispatcher("/WEB-INF/view/free/freeBoardUpdate.jsp").forward(request, response);
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("utf-8");
+		
+		String uploadPath = "c:/freeBoardPic";
+		
+		File uploadDir = new File(uploadPath);
+		if(!uploadDir.exists()) {
+			uploadDir.mkdirs();
+		}
+		
+		int bonum = Integer.parseInt(request.getParameter("free_num"));
+		System.out.println("게시글 번호 : " + bonum);
+		String title = request.getParameter("f_title");
+		System.out.println("제목 : " + title);
+		String content = request.getParameter("f_content");
+		System.out.println("내용 : " + content);
+		
+		content = content.replace("\r\n", "<br>");
+	    String region = request.getParameter("cityNameee");
+	    System.out.println("지역 : "  + region);
+	    String pname = request.getParameter("pname");
+	    System.out.println("프로필닉네임 : " + pname);
+		
+		FreeBoardVO fvo = new FreeBoardVO();
+		fvo.setFb_no(bonum);
+		fvo.setFb_title(title);
+		fvo.setFb_reg(region);
+		fvo.setFb_content(content);
+		fvo.setP_name(pname);
+	
+		
+		Part part = request.getPart("free_pic");
+		System.out.println(part);
+
+		if(part!=null) {
+			String fileName = extractFileName(part);
+			
+			if(!"".equals(fileName)) {
+				try {
+					part.write(uploadPath + File.separator + fileName);
+					fvo.setFb_pic(fileName);
+				} catch (Exception e) {
+					fvo.setFb_pic(null);
+				}
+			}
+		}
+		
+		// 서비스 객체 생성
+		IFreeBoardService service = FreeBoardServiceImpl.getInstance();
+		
+		// update
+		int res = service.updateBoard(fvo);
+		
+		if(res != 0) {
+			System.out.println("수정 성공!");	
+		}else {
+			System.out.println("수정 요청 실행실패");
+		}
+		
+		response.sendRedirect(request.getContextPath() + "/freeboard/freeBoardList.do");
+		
+	}
+
+	private String extractFileName(Part part) {
+		String fileName = "";
+	      
+	      String contentDisposition = part.getHeader("content-disposition");
+	      String[] items = contentDisposition.split(";");
+	      for(String item : items) {
+	         if(item.trim().startsWith("filename")) { 
+	            // filename = "test1.txt"
+	            fileName = item.substring(item.indexOf("=")+2, item.length()-1);
+	         }
+	         
+	      }
+	      return fileName;
+	}
+	
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE sqlMap
+   PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+   "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+   
+<sqlMap namespace="freeboard-reply">
+	<!-- 댓글등록 -->
+	<insert id="insertReply" parameterClass="FreeReplyVO" >
+		insert into free_comment(
+				fcom_no,
+				fcom_content,
+				fcom_date,
+				fb_no,
+				p_name
+		)values(free_comment_seq.nextval, #fcom_content#, sysdate, #fb_no#, #p_name#)
+	</insert>
+	
+	<!-- 댓글리스트 -->
+	<select id="listReply" parameterClass="int" resultClass="FreeReplyVO">
+		select * from free_comment where fb_no=#data#
+	</select>
+	
+	
+</sqlMap>

@@ -1,0 +1,52 @@
+package reviewBoard.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import reviewBoard.service.IReviewService;
+import reviewBoard.service.ReviewServiceImpl;
+import vo.ReviewBoardVO;
+
+@WebServlet("/reviewboard/reviewBoardDetail.do")
+public class ReviewBoardDetail extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("UTF-8");
+		
+		String revno = request.getParameter("rev_no");
+		System.out.println(revno);
+		int rev_no = Integer.parseInt(revno);
+		System.out.println(rev_no);
+		
+		IReviewService service = ReviewServiceImpl.getService();
+		
+		//조회수 증가
+		service.updateHit(rev_no);
+		
+		ReviewBoardVO rvo = service.getDetailReview(rev_no);
+		
+		request.setAttribute("rvo", rvo);
+		
+		request.getRequestDispatcher("/WEB-INF/view/review/reviewBoardDetail.jsp")
+					.forward(request, response);
+		
+		
+		
+	
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+
+	}
+
+}

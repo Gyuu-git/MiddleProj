@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="review">
+
+	<!-- 전체 리스트 출력 -->
+	<select id="getAllReview"  resultClass="reviewBoardVO">
+		select * from review order by rev_date desc
+	</select>
+	
+	<select id="getAllReviewByHit" resultClass="reviewBoardVO">
+		select*from review order by rev_hit desc
+	</select>
+	<!--  <select id="getReview" parameterClass="map" resultClass="reviewBoardVO">
+		select * 
+		  from REVIEW 
+		 where REG_NO=#REG_NO# 
+		 		and 	REV_DATE between #startDate# and #endDate#
+	</select> -->
+
+<!-- 	<select id="getCountry" resultClass="String" parameterClass="int"> -->
+<!-- 		select coun_name -->
+<!--   		  from country -->
+<!--         where  coun_no=((select coun_no -->
+<!--                     				from region -->
+<!--                    				   where reg_no=(select reg_no -->
+<!--                                    						   from review -->
+<!--                                    						  where reg_no=#regNo#))); -->
+	
+<!-- 	</select> -->
+
+		<!-- 리스트 출력 - 게시글 번호 기준 -->
+		<select id="getDetailReview" parameterClass="int" resultClass="reviewBoardVO">
+			select * from review where rev_no=#rev_no#
+		</select>
+		
+		<!-- 리스트 출력(지역, 날짜 기준으로 검색) -->
+		<select id="getReview" parameterClass="int" resultClass="reviewBoardVO">
+			select * from review where rev_no=#rev_no#
+		</select>
+		
+		<!-- 후기 등록 -->
+		<update id="insertReview" parameterClass="reviewBoardVO" >
+			insert into review(
+										rev_no,
+										rev_title,
+										rev_content,
+										rev_date,
+										rev_pic,
+										rev_hit,
+										p_name,
+										reg_no
+			)values(
+										review_seq.nextval,
+										#rev_title#,
+										#rev_content#,
+										sysdate,
+										#rev_pic#,
+										0,
+										#p_name#,
+										#reg_no#
+			)
+		</update>
+		
+		<!-- 후기 삭제 -->
+		<delete id="deleteReview" parameterClass="int">
+			delete review where rev_no=#rev_no#
+		</delete>
+		
+		<!-- 후기 수정 -->
+		<update id="updateReview" parameterClass="reviewBoardVO">
+			update review set 
+					    rev_title=#rev_title#,
+						rev_content=#rev_content#,
+						rev_pic=#rev_pic#,
+					    reg_no=#reg_no#
+			   where rev_no=#rev_no#
+		</update>
+		
+		<!-- 조회수 증가 -->
+		<update id="updateHit" parameterClass="int">
+			update review set
+						rev_hit = rev_hit +1
+				where rev_no=#rev_no#		
+		</update>
+		
+		
+
+</sqlMap>

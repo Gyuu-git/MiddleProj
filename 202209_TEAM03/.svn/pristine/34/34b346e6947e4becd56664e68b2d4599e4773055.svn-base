@@ -1,0 +1,16 @@
+package member.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import vo.NoteVO;
+
+public interface IMemberDao {
+	public String getId(String id) throws SQLException;
+	public Object insertNote(NoteVO vo) throws SQLException;
+	public List<NoteVO> getNoteList(String mem_id) throws SQLException;
+	public int Join(Map<String, Object> map)  throws SQLException;
+	public String getName(String id)  throws SQLException;
+	public String searchId(Map<String, Object> map) throws SQLException; 
+}

@@ -1,0 +1,43 @@
+package freeBoard.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.ibatis.config.SqlMapClientFactory;
+import vo.FreeBoardVO;
+
+public class FreeBoardDaoImpl implements IFreeBoardDao {
+	
+	private SqlMapClient smc; // iBatis 처리용 객체 변수 선언
+
+	//1번 
+	private static FreeBoardDaoImpl dao;
+	
+	//2번
+	private FreeBoardDaoImpl() {
+		smc = SqlMapClientFactory.getSqlMapClient();
+	}
+	
+	//3번
+	public static FreeBoardDaoImpl getInstance() {
+		if(dao == null)
+			dao = new FreeBoardDaoImpl();
+		return dao;
+	}
+	
+	// 모든 게시글 출력
+	@Override
+	public List<FreeBoardVO> getAllFreeBoard() {
+		List<FreeBoardVO> boardList = null;
+		
+		try {
+			boardList = smc.queryForList("freeboard.getAllFreeBoard");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return boardList;
+	}
+
+}

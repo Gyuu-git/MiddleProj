@@ -1,0 +1,52 @@
+package reviewBoard.controller;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import reviewBoard.service.IReviewService;
+import reviewBoard.service.ReviewServiceImpl;
+import vo.ReviewBoardVO;
+
+
+@WebServlet("/reviewBoardList.do")
+public class ReviewBoardList extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		request.setCharacterEncoding("utf-8");
+		//String city = request.getParameter("도시");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		
+		System.out.println("시작날짜 : "+startDate);
+		System.out.println("반납날짜 : "+endDate);
+		
+		Map<String, Object> pMap = new HashMap<String, Object>();
+		//pMap.put("city", city);
+		pMap.put("startDate", startDate);
+		pMap.put("endDate", endDate);
+		
+		IReviewService service = ReviewServiceImpl.getService();
+		List<ReviewBoardVO> reviewList =  service.getReview(pMap);
+		
+		request.setAttribute("reviewList", reviewList);
+		
+		 
+		
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+	}
+
+}

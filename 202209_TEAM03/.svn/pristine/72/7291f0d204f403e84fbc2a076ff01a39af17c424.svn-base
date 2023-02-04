@@ -1,0 +1,77 @@
+package mainBoard.service;
+
+import java.util.List;
+import java.util.Map;
+
+import mainBoard.dao.ImainBoardDao;
+import mainBoard.dao.MainBoardDaoImpl;
+import vo.MainJoinVO;
+import vo.MainRegionVO;
+import vo.MainReplyVO;
+
+public class MainBoardServiceImpl implements ImainBoardService {
+	
+		private static MainBoardServiceImpl service;
+		
+		private ImainBoardDao dao;	
+		
+		private MainBoardServiceImpl() {
+			dao = MainBoardDaoImpl.getInstance(); 
+		}
+		
+		public static MainBoardServiceImpl getInstance() {
+			if(service==null) service = new MainBoardServiceImpl();
+			
+			return service;
+		}
+
+	@Override
+	public List<MainJoinVO> mainBoardListN() {
+		return dao.mainBoardListN();
+	}
+
+	@Override
+	public MainJoinVO getOneMainBoard(int mb_no) {
+		
+		return dao.getOneMainBoard(mb_no);
+	}
+
+	@Override
+	public int getMbUphit(int mb_no) {
+		// TODO Auto-generated method stub
+		return dao.getMbUphit(mb_no);
+	}
+
+	@Override
+	public int insertMainReply(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return dao.insertMainReply(map);
+	}
+
+	@Override
+	public List<MainReplyVO> getMBreplyList(int mb_no) {
+		// TODO Auto-generated method stub
+		return dao.getMBreplyList(mb_no);
+	}
+
+	@Override
+	public List<MainRegionVO> getallcontinent() {
+		// TODO Auto-generated method stub
+		return dao.getallcontinent();
+	}
+
+	@Override
+	public List<MainRegionVO> getallcountry(int conti_no) {
+		// TODO Auto-generated method stub
+		return dao.getallcountry(conti_no);
+	}
+
+	@Override
+	public List<MainRegionVO> getallregion(int coun_no) {
+		// TODO Auto-generated method stub
+		return dao.getallregion(coun_no);
+	}
+
+	
+
+}

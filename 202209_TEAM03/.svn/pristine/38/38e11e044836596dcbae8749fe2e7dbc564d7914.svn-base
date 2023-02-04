@@ -1,0 +1,46 @@
+package freeBoard.controller;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import freeBoard.service.FreeBoardServiceImpl;
+import freeBoard.service.IFreeBoardService;
+import vo.FreeBoardVO;
+import vo.FreeReplyVO;
+
+
+@WebServlet("/freeboard/doReply.do")
+public class doReply extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	// 댓글등록 페이지 이동
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("utf-8"); 
+		
+		// 클라이언트 요청시 전송 데이터 받기 
+		int num = Integer.parseInt(request.getParameter("bo_num")); 
+		
+
+		// 서비스 객체 생성
+		IFreeBoardService service = FreeBoardServiceImpl.getInstance();
+		
+		// 글 선택 시 조회수 증가
+//		service.updateHit(num);
+			
+		// 게시글 번호를 받아 상세조회
+		FreeBoardVO vo = service.getArticle(num);
+		
+		request.setAttribute("getArticle", vo);
+		
+		// 상세조회페이지와 같은 페이지를 하나 더 만들어서 댓글 창 만들기
+//		request.getRequestDispatcher("/WEB-INF/view/free/freeBoardReply.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/free/freeBoardDetail.jsp").forward(request, response);
+	}
+
+}

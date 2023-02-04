@@ -1,0 +1,78 @@
+package freeBoard.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import freeBoard.service.FreeBoardServiceImpl;
+import freeBoard.service.IFreeBoardService;
+import vo.FreeBoardVO;
+
+
+@WebServlet("/freeboard/updateBoard.do")
+public class UpdateBoard extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/* 자유게시판 게시글 수정페이지로 이동 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		
+		int bonum = Integer.parseInt(request.getParameter("bo_num"));
+		
+		// 서비스객체
+		IFreeBoardService service = FreeBoardServiceImpl.getInstance();
+		
+		// 원래게시글 불러오기
+		FreeBoardVO board = service.getArticle(bonum);
+		
+		// 게시글번호를 키값에 담기
+		request.setAttribute("board", board);
+		
+		request.getRequestDispatcher("/WEB-INF/view/free/freeBoardUpdate.jsp").forward(request, response);
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("utf-8");
+		
+		int bonum = Integer.parseInt(request.getParameter("bo_num"));
+		String title = request.getParameter("vt");
+		String content = request.getParameter("vc");
+		String region  = request.getParameter("vr");
+		
+		FreeBoardVO vo = new FreeBoardVO();
+		vo.setFb_no(bonum);
+		vo.setFb_title(title);
+		vo.setFb_reg(region);
+		vo.setFb_content(content);
+		
+		System.out.println(bonum);
+		System.out.println(title);
+		System.out.println(content);
+		System.out.println(region);
+		
+		// 서비스 객체 생성
+		IFreeBoardService service = FreeBoardServiceImpl.getInstance();
+		
+		// update
+		int res = service.updateBoard(vo);
+		
+		if(res != 0) {
+			System.out.println("수정 성공!");
+			PrintWriter out = response.getWriter();
+			out.write(res);
+			
+		}else {
+			System.out.println("수정 요청 실행실패");
+		}
+		
+	}
+
+}

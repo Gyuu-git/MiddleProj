@@ -1,0 +1,58 @@
+package reviewBoard.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.ibatis.config.SqlMapClientFactory;
+import vo.ReviewBoardVO;
+
+public class ReviewDaoImpl implements IReviewDao {
+	
+	private SqlMapClient client;
+	private static IReviewDao dao;
+	
+	 private ReviewDaoImpl() {
+		 client = SqlMapClientFactory.getSqlMapClient();
+	 }
+	 
+	 public static IReviewDao getDao() {
+		 if(dao == null) dao = new ReviewDaoImpl();
+		 
+		 return dao;
+	 }
+
+	@Override
+	public List<ReviewBoardVO> getReview(Map<String, Object> map) {
+		System.out.println(map.get("startDate"));
+		System.out.println(map.get("endDate"));
+		return null;
+	}
+	
+	@Override
+	public List<ReviewBoardVO> getAllReview() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int insertReview(ReviewBoardVO vo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteReview(int rev_no) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int updateReview(ReviewBoardVO vo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+}

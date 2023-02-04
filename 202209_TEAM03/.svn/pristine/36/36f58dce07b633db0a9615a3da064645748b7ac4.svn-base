@@ -1,0 +1,38 @@
+package member.service;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import vo.MemberVO;
+import vo.NoteVO;
+import vo.Profile;
+
+public interface IMemberService {
+	public String getId(String id) throws SQLException;
+	public Object insertNote(NoteVO vo) throws SQLException;
+	public List<NoteVO> getNoteList(String mem_id, String num) throws SQLException;
+	public int Join(Map<String, Object> map)  throws SQLException;
+	public String getName(String id)  throws SQLException;
+	public String searchId(Map<String, Object> map)  throws SQLException;
+	public int duplication(String id) throws SQLException;
+	public Object SignUp(MemberVO vo) throws SQLException;
+	public int picduple(String picname) throws SQLException;
+	public int searchReg(String id)throws SQLException;
+	public Object proInsert(Profile pro)throws SQLException;
+	public String searchIntro(String id)throws SQLException;
+	public int updateMember(Map<String, Object> map) throws SQLException;
+	public int updateIntro(Map<String, Object> map2)throws SQLException;
+	public int deleteMember(String id)throws SQLException;
+	public int deleteProfile(String id)throws SQLException;
+	public List<NoteVO> sendNote(String id) throws SQLException;
+	public List<NoteVO> receiveNote(String id) throws SQLException;
+	public NoteVO detailReceiveNote(String no)throws SQLException;
+	
+	// 프로필VO 가져오기
+	public Profile getProfile(String id) throws SQLException;
+	public NoteVO receiveDetail(Map<String, Object> map)throws SQLException;
+	public NoteVO sendDetail(Map<String, Object> map)throws SQLException;
+	public void updateColor(int no)throws SQLException;
+	
+}

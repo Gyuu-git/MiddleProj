@@ -1,0 +1,74 @@
+package member.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.ibatis.config.SqlMapClientFactory;
+import vo.NoteVO;
+
+public class MemberDaoImpl implements IMemberDao {
+	
+	private static IMemberDao dao;
+	private SqlMapClient smc;
+	
+	private MemberDaoImpl() {
+		smc=SqlMapClientFactory.getSqlMapClient();
+	}
+	
+	public static IMemberDao getDao() {
+		if(dao==null) {
+			dao=new MemberDaoImpl();
+		}
+		return dao;
+	}
+	
+	
+	@Override
+	public String getId(String id) throws SQLException{
+		
+		String name=(String) smc.queryForObject("board.getId",id);
+		
+		return name;
+	}
+
+
+	@Override
+	public Object insertNote(NoteVO vo) throws SQLException {
+		Object obj=smc.insert("note.insertNote", vo);
+		return obj;
+	}
+
+	@Override//로그인을 하기 위해 로그인 아이디와 로그인 비밀번호 받는 함수
+	public List<NoteVO> getNoteList(String mem_id) throws SQLException {
+		System.out.println("다오 넘겨받은 아이디 : "+mem_id);
+		List<NoteVO> list=smc.queryForList("note.getNoteList",mem_id);
+		
+		return list;
+	}
+
+	@Override//로그인 후 상단 풋터에 이름을 띄우기 위한 이름 가져오는 함수
+	public int Join(Map<String, Object> map) throws SQLException {
+		System.out.println(map.get("id"));
+		System.out.println(map.get("pw"));
+		int answer=(int) smc.queryForObject("member.Join",map);
+		return answer;
+	}
+
+	@Override
+	public String getName(String id) throws SQLException {
+		String name=(String) smc.queryForObject("member.getName",id);
+		return name;
+	}
+
+	@Override
+	public String searchId(Map<String, Object> map) throws SQLException {
+		System.out.println(map.get("name"));
+		String answer=(String) smc.queryForObject("member.searchId",map);
+		
+		return answer;
+	}
+
+}

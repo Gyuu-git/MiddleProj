@@ -1,0 +1,57 @@
+package mainBoard.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import vo.MainJoinVO;
+import vo.MainRegionVO;
+import vo.MainReplyVO;
+
+public interface ImainBoardDao {
+	/**
+	 * 검색어 없이 최신순으로 모든 게시글 데이터를 가져오는 메서드
+	 * 
+	 * @return List<MainBoardVO>
+	 * 
+	 */
+	public List<MainJoinVO> mainBoardListN();
+	
+
+	/**
+	 * 메인보드 넘버를 인자로 받아 해당 게시글 하나의 모든 데이터를 가져오는 메서드 
+	 * 
+	 * @param <MainBoardVO>
+	 * @param mb_no
+	 * @return 
+	 */
+	public MainJoinVO getOneMainBoard(int mb_no);
+	
+	/**
+	 * 해당 게시글의 조회수를 1 더해주는 메서드 
+	 * @param mb_no
+	 * @return update하고 성공 1, 실패 0
+	 */
+	public int getMbUphit(int mb_no);
+	
+	/**
+	 * Mb_no와 댓글 내용을 입력받아 DB에 인서트하는 메서드 
+	 * @param map
+	 * @return 성공 null, 실패 오류  (성공하면 dao에서 1로 변환)
+	 */
+	public int insertMainReply(Map<String, Object> map);
+	
+	/**
+	 * Mb_no를 입력받아 해당 게시글의 댓글 목록을 가져오는 메서드 
+	 * @param mb_no
+	 * @return List<MainReplyVO>
+	 */
+	public List<MainReplyVO> getMBreplyList(int mb_no);
+	
+	/**
+	 * 모든 대륙 리스트를 반환하는 메서드 
+	 * @return continum과 대륙이름이 포함된 리스트를 반환
+	 */
+	public List<MainRegionVO> getallcontinent();
+	
+	
+}

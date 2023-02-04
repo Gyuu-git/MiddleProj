@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+	<sqlMap namespace="schedule">
+
+	<select id="getAllData" resultClass="svo">
+		select
+			cal_no as "cal_no",
+			ID as "_id",
+			TITLE as "title",
+			DESCRIPTION as "description",
+			START1 as "start",
+			END1 as "end",
+			TYPE1 as "type",
+			USERNAME as "username",
+			BACKGROUNDCOLOR as "backgroundColor",
+			TEXTCOLOR as "textColor",
+			ALLDAY as "allDay"
+		from schedule
+	</select>
+
+	<insert id="insertData" parameterClass="svo">
+		insert into schedule
+		values(
+		cal_seq.nextval, #title#, #description#, #start#, #end#, #type#, #username#,
+		#backgroundColor#, #textColor#, #allDay#, #_id#
+		)
+	</insert>
+
+	<update id="updateData" parameterClass="svo">
+		update schedule set
+				title = #title#, description = #description#, start1 = #start#, end1 = #end#, 
+				backgroundColor = #backgroundColor#, allDay = #allDay#
+		where cal_no = #cal_no#
+	</update>
+
+	<delete id="deleteData" parameterClass="int">
+		delete from schedule
+		where cal_no = #data#
+	</delete>
+		
+	
+	
+	</sqlMap>

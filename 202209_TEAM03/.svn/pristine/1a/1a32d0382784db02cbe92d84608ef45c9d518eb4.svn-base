@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="note"> 
+
+
+<insert id="insertNote" parameterClass="noteVO">
+	insert into note (note_no, note_send, note_title, note_content, note_sdate, note_edate, note_status, mem_id)
+	values
+	(note_seq.nextval, #note_send#, #note_title#, #note_content#, sysdate, sysdate, #note_status#, #mem_id#)
+</insert>
+
+<select id="getNoteList" resultClass="noteVO" parameterClass="string">
+	select * 
+	from note 
+	where mem_id=#mem_id# 
+	order by note_edate desc
+</select>
+
+
+<select id="sendNote" parameterClass="string" resultClass="noteVO">
+	select *
+	from note
+	where note_send=#note_send#
+	order by note_edate desc
+</select>
+
+
+<select id="reciveNote" parameterClass="string" resultClass="noteVO">
+	select *
+	from note
+	where mem_id=#mem_id#
+	order by note_edate desc
+</select>
+
+<select id="detailReceiveNote" parameterClass="int" resultClass="noteVO">
+select *
+from note
+where note_no=#note_no#
+</select>
+
+ 
+</sqlMap>

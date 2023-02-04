@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="member"> 
+
+
+ <select id="getId" parameterClass="string" resultClass="string">
+ 	select mem_name
+ 	from member
+ 	where mem_id=#mem_id#
+ </select>
+ 
+ <select id="Join" parameterClass="map" resultClass="int">
+ 	select count(*)
+ 	from member
+ 	where mem_id=#id# 
+ 	and 
+ 	mem_pass=#pw#
+ </select>
+ 
+ <select id="getName" parameterClass="string" resultClass="string">
+ 	select mem_name
+ 	from member
+ 	where mem_id=#mem_id#
+ </select>
+ 
+ <select id="searchId" resultClass="string" parameterClass="map">
+ 	select mem_id
+ 	from member
+ 	where mem_name=#mem_name#
+ 	and
+ 	mem_tel=#mem_tel#
+ </select>
+</sqlMap>

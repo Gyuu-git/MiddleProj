@@ -1,0 +1,120 @@
+package withme.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.ibatis.config.SqlMapClientFactory;
+import vo.AccountVO;
+import vo.ChatVO;
+
+public class WithMeDaoImpl implements IWithMeChatDao {
+	private SqlMapClient smc;
+	private static IWithMeChatDao dao;
+	public WithMeDaoImpl() {
+		smc = SqlMapClientFactory.getSqlMapClient();
+	}
+	public static IWithMeChatDao getInstance() {
+		if(dao == null) dao = new WithMeDaoImpl();
+		return dao;
+	}
+
+	@Override
+	public List<Integer> getWmCode(String pName) {
+		List<Integer> wmCodes = null;
+		try {
+			wmCodes = smc.queryForList("withme.getWmCode", pName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return wmCodes;
+	}
+
+	@Override
+	public List<ChatVO> getChatList(ChatVO chatVo) {
+		List<ChatVO> chatList = null;
+		try {
+			chatList = smc.queryForList("withme.getChatList", chatVo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return chatList;
+	}
+
+//	@Override
+//	public int insertChat(Map<String, String> param) {
+//		int cnt = 0;
+//		try {
+//			cnt = smc.update("withme.insertChat", param);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return cnt;
+//	}
+	@Override
+	public int insertChat(ChatVO chatVo) {
+		int cnt = 0;
+		try {
+			cnt = smc.update("withme.insertChat", chatVo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cnt;
+	}
+	@Override
+	public String getWmGrade(Map<String, String> param) {
+		String g = "";
+		try {
+			g = (String) smc.queryForObject("withme.getWmGrade", param);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return g;
+	}
+	
+	@Override
+	public List<AccountVO> getAccList(String room) {
+		List<AccountVO> list = null;
+		try {
+			list = smc.queryForList("withme.getAccList", room);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public int insertAcc(AccountVO aVo) {
+		try {
+			smc.update("withme.insertAcc", aVo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	@Override
+	public int deleteAcc(int no) {
+		int res = 0;
+		try {
+			res = smc.delete("withme.deleteAcc", no);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	@Override
+	public int updateAcc(AccountVO accVo) {
+		int cnt = 0;
+		try {
+			cnt = smc.update("withme.updateAcc", accVo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cnt;
+	}
+
+}
