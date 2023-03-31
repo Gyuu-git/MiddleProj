@@ -8,4 +8,5 @@ withme 페이지의 fullCalender API. withMeSche 페이지의 기능을 제외�
 JSP<br/>
 WebContent > WEB-INF > view > withme
 <br/><br/>
-JAVA
+JAVA 코드<br/>
+src > withme
